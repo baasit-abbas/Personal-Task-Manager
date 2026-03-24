@@ -37,6 +37,7 @@ const NavBar = () => {
             <RiArrowDropDownLine size={35} className="absolute top-1/2 translate-y-[-50%] right-0" />
             </div>
             {isShow && <ul className="w-40 bg-white font-bold rounded-md absolute top-13 flex flex-col justify-center items-center">
+                <Links name='Home' href='/'/>
                 <Links name='Dashboard' href='/dashboard'/>
                 <Links name='Log Out' Click={() => signOut({callbackUrl:'/login'})}/>
             </ul>}

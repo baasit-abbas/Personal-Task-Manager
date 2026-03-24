@@ -35,7 +35,6 @@ const Login = () => {
         console.log(res)
 
         if (res?.ok) {
-          toast.success('Login Successfull')
           router.push('/')
         } else {
           toast.error('Invalid Username or Passowrd')
