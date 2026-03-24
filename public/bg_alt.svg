@@ -1,0 +1,31 @@
+<svg width="1920" height="1080" viewBox="0 0 1920 1080" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="base" x1="0" y1="0" x2="1920" y2="1080" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#071A2F"/>
+      <stop offset="0.5" stop-color="#12304A"/>
+      <stop offset="1" stop-color="#0A1F33"/>
+    </linearGradient>
+    <radialGradient id="glowA" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(420 260) rotate(12) scale(520 360)">
+      <stop stop-color="#58F2C7" stop-opacity="0.42"/>
+      <stop offset="1" stop-color="#58F2C7" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="glowB" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(1520 860) rotate(-25) scale(620 420)">
+      <stop stop-color="#66D4FF" stop-opacity="0.34"/>
+      <stop offset="1" stop-color="#66D4FF" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" x="0" y="0" width="64" height="64" patternUnits="userSpaceOnUse">
+      <path d="M64 0H0V64" stroke="#D8F4FF" stroke-opacity="0.08"/>
+    </pattern>
+  </defs>
+
+  <rect width="1920" height="1080" fill="url(#base)"/>
+  <rect width="1920" height="1080" fill="url(#grid)"/>
+  <ellipse cx="420" cy="260" rx="520" ry="360" fill="url(#glowA)"/>
+  <ellipse cx="1520" cy="860" rx="620" ry="420" fill="url(#glowB)"/>
+
+  <g stroke="#CFFAFE" stroke-opacity="0.2" fill="none">
+    <path d="M-100 760C240 640 540 710 860 610C1180 510 1420 620 2020 470"/>
+    <path d="M-100 860C220 730 600 820 920 700C1240 580 1500 700 2020 540" stroke-opacity="0.14"/>
+    <path d="M-100 970C300 850 700 930 1010 820C1320 710 1620 820 2020 690" stroke-opacity="0.12"/>
+  </g>
+</svg>
