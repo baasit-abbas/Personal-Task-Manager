@@ -4,7 +4,7 @@ import React from 'react'
 
 const Show = (props) => {
   return (
-    <div className="flex gap-3 items-center font-bold text-green-500 text-lg cursor-pointer">
+    <div className="flex gap-3 items-center font-bold text-green-500 md:text-lg text-sm cursor-pointer">
           <label className="cursor-pointer" htmlFor={props.id}>{props.name}</label>
           <input
            className="cursor-pointer"

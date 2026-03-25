@@ -49,9 +49,9 @@ const Register = () => {
   };
   return (
     <div className="flex flex-col items-center justify-center bg-amber-50 m-10 rounded-md gap-8">
-      <h1 className="text-6xl font-bold text-slate-800">Create Your Account</h1>
+      <h1 className="md:text-6xl text-4xl font-bold text-slate-800">Create Your Account</h1>
       <form className="flex flex-col gap-7" onSubmit={handleSubmit}>
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col md:gap-3 gap-8">
           <FormInput
             name="Username"
             type="text"

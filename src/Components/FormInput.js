@@ -22,7 +22,7 @@ const FormInput = (props) => {
         (props.type)}
         name={props.name}
         placeholder={`Enter ${props.name}`}
-        className="border-2 border-slate-500 focus:border-blue-700 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-md w-90 px-3 pr-10 py-2"
+        className="border-2 border-slate-500 focus:border-blue-700 focus:ring-2 focus:ring-blue-200 focus:outline-none rounded-md md:w-90 w-80 px-3 pr-10 py-2"
       />
       <div className="cursor-pointer" onClick={() => setshow(!show)}>
         {props.type === "password" && (

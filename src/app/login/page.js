@@ -54,9 +54,9 @@ const Login = () => {
     }
   }
   return (
-    <div className="h-screen bg-white p-6">
-      <div className="bg-gray-200 rounded-md w-full h-full flex items-center justify-center px-10 gap-10 flex-col ">
-        <h1 className="text-7xl text-green-400 font-bold">TaskManager</h1>
+    <div className="h-screen bg-white md:p-6 p-0">
+      <div className="bg-gray-200 rounded-md w-full h-full flex items-center justify-center px-3 md:px-10 gap-10 flex-col ">
+        <h1 className="md:text-7xl text-6xl text-green-400 font-bold">TaskManager</h1>
         <h2 className="text-2xl text-black">Enter your Login credentials</h2>
         <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
           <div className="flex flex-col gap-3">
@@ -67,7 +67,7 @@ const Login = () => {
           <Submit />
         </form>
         {Loading && <div><Loader color='black' /></div>}
-        <div onClick={githubLogIn} className="relative w-[30%] h-10 active:scale-[0.9] transition-all duration-300">
+        <div onClick={githubLogIn} className="relative md:w-[30%] w-full h-10 active:scale-[0.9] transition-all duration-300">
           <button className="select-none w-full h-full text-center rounded-md text-lg font-bold text-slate-800 bg-white border-none cursor-pointer hover:bg-gray-200 transition duration-300">Continue with github</button>
           <FaGithub size={25} className="absolute left-3 top-1/2 translate-y-[-50%] cursor-pointer hover:text-gray-600 transition-all duration-300"  />
         </div>

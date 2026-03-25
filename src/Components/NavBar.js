@@ -10,9 +10,9 @@ const NavBar = () => {
   const [isShow, setisShow] = useState(false)
   const router = useRouter();
   return (
-    <div className="fixed top-0 bg-slate-900 h-15 left-0 right-0 flex items-center justify-between px-20 z-10">
-      <h1 className="text-slate-400 text-4xl font-bold">Task Manager</h1>
-      <div>
+    <div className="fixed top-0 bg-slate-900 h-15 left-0 right-0 flex items-center justify-center  md:justify-between md:px-20 px-2 z-10">
+      <h1 className="text-slate-400 md:text-4xl text-3xl font-bold md:w-auto w-full">Task Manager</h1>
+      <div className="md:w-auto w-[50%]">
         {status === "unauthenticated" ? (
           <div>
             <button
@@ -36,7 +36,7 @@ const NavBar = () => {
             },300)}} onClick={() => {setisShow(!isShow)}} className="px-3 py-2 pr-8 bg-white font-bold text-md  rounded-md cursor-pointer hover:bg-gray-200 transition-all duration-300">Hello {session?.user?.name}</button>
             <RiArrowDropDownLine size={35} className="absolute top-1/2 translate-y-[-50%] right-0" />
             </div>
-            {isShow && <ul className="w-40 bg-white font-bold rounded-md absolute top-13 flex flex-col justify-center items-center">
+            {isShow && <ul className="w-40 bg-white font-bold rounded-md absolute md:top-13 top-18 right-0 md:right-3 flex flex-col justify-center items-center">
                 <Links name='Home' href='/'/>
                 <Links name='Dashboard' href='/dashboard'/>
                 <Links name='Log Out' Click={() => signOut({callbackUrl:'/login'})}/>

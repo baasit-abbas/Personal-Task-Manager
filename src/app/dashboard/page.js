@@ -94,7 +94,7 @@ const Page = () => {
       >
         Add Task
       </button>
-      <div className="flex gap-3 items-center fixed top-33 left-1/2 translate-x-[-25%] z-[-1] w-full">
+      <div className="flex gap-3 items-center fixed top-33 md:left-1/2 md:translate-x-[-25%] z-[-1] w-full md:px-0 px-2">
         <Show selected={selected} id={'Show All'} name={'Show All'} func = {handleSelected} />
         <Show selected={selected} id={'Show Low'} name={'Show Low Priority tasks'} func = {handleSelected} />
         <Show selected={selected} id={'Show Medium'} name={'Show Medium Priority tasks'} func = {handleSelected} />
@@ -103,13 +103,13 @@ const Page = () => {
         
       </div>
       {showTask().length === 0 ? (
-        <div className="h-40 w-full flex items-center justify-center mt-60">
-          <h1 className="text-8xl w-[60%] font-bold text-green-400">
-            You Tasks to Show {session?.user?.name}.
+        <div className="h-40 w-full flex items-center md:justify-center md:mt-60 mt-80">
+          <h1 className="md:text-8xl text-7xl md:w-[60%] w-full md:px-0 px-5 font-bold text-green-400">
+            No Tasks to Show {session?.user?.name}.
           </h1>
         </div>
       ) : (
-        <div className="container flex flex-wrap gap-8 mt-50 px-10 pb-16">
+        <div className="container flex flex-wrap gap-8 md:mt-50 mt-55 px-10 pb-16">
           {showTask().map((task) => {
             return (
               <Card

@@ -71,7 +71,7 @@ const Form = () => {
   };
   return (
     <div className="flex flex-col justify-center items-center min-h-screen bg-emerald-50 text-green-900 gap-10">
-      <h1 className="text-5xl font-bold text-green-900">
+      <h1 className="md:text-5xl text-3xl font-bold text-green-900">
         Fill the Details About Task
       </h1>
       <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
@@ -79,7 +79,7 @@ const Form = () => {
           <label className="font-bold text-2xl text-green-900" htmlFor="title">
             Enter Title:
           </label>
-          <div className="w-120">
+          <div className="md:w-120 w-90">
             <input
               onChange={(e) => settitle(e.target.value)}
               className="w-full py-3 border-2 border-green-300 focus:border-green-800 focus:outline-none rounded-md placeholder:text-lg px-3 text-xl placeholder:text-green-600 text-green-900 placeholder:font-normal font-bold"
@@ -95,7 +95,7 @@ const Form = () => {
           <label className="font-bold text-2xl text-green-900" htmlFor="desc">
             Enter Description:
           </label>
-          <div className="w-120">
+          <div className="md:w-120 w-90">
             <input
               onChange={(e) => setdescription(e.target.value)}
               className="w-full py-3 border-2 border-green-300 focus:border-green-800 focus:outline-none rounded-md placeholder:text-lg px-3 text-xl placeholder:text-green-600 text-green-900 placeholder:font-normal font-bold"
