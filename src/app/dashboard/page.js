@@ -7,10 +7,14 @@ import API from "../lib/api_client";
 import Card from "@/Components/Card";
 import { toast } from "react-toastify";
 import Show from "@/Components/Show";
+import { FaSun } from "react-icons/fa";
+import { FaMoon } from "react-icons/fa";
+import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 
 const Page = () => {
   const [tasks, setTasks] = useState([]);
   const [selected, setSelected] = useState("Show All");
+  const [isDark, setisDark] = useState(false);
   const { data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
@@ -21,10 +25,9 @@ const Page = () => {
     fetchDate();
   }, []);
 
-
   const formatDueDate = (dateValue) => {
     const date = new Date(dateValue);
-    if (Number.isNaN(date.getTime())) return props.date;
+    if (Number.isNaN(date.getTime())) return dateValue;
 
     return date.toLocaleDateString("en-CA", {
       year: "numeric",
@@ -34,7 +37,7 @@ const Page = () => {
   };
 
   const handleEdit = (id) => {
-    let updateData = tasks.find((t) => String(t._id) === String(id))
+    let updateData = tasks.find((t) => String(t._id) === String(id));
     updateData.dueDate = formatDueDate(updateData.dueDate);
     const encoded = encodeURIComponent(JSON.stringify(updateData));
     router.push(`/form?data=${encoded}`);
@@ -72,8 +75,8 @@ const Page = () => {
   };
 
   const handleSelected = (name) => {
-    setSelected(name)
-  }
+    setSelected(name);
+  };
 
   const showTask = () => {
     if (selected === "Show All") return tasks;
@@ -85,8 +88,42 @@ const Page = () => {
     }
     return tasks.filter((task) => task.priority === "High");
   };
+
+  const handleDragEnd = (result) => {
+    const { source, destination } = result;
+
+    if (!destination || source.index === destination.index) {
+      return;
+    }
+
+    const visibleTasks = showTask();
+    const reorderedVisible = Array.from(visibleTasks);
+    const [movedTask] = reorderedVisible.splice(source.index, 1);
+    reorderedVisible.splice(destination.index, 0, movedTask);
+
+    if (selected === "Show All") {
+      setTasks(reorderedVisible);
+      return;
+    }
+
+    const visibleTaskIds = new Set(visibleTasks.map((task) => String(task._id)));
+    let visibleIndex = 0;
+
+    const mergedTasks = tasks.map((task) => {
+      if (!visibleTaskIds.has(String(task._id))) {
+        return task;
+      }
+      const nextTask = reorderedVisible[visibleIndex];
+      visibleIndex += 1;
+      return nextTask;
+    });
+
+    setTasks(mergedTasks);
+  };
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_right,#e2fbe7_0%,#f8fafc_45%,#ecfdf3_100%)]">
+    <div
+      className={`min-h-screen ${isDark ? "bg-slate-700" : "bg-[radial-gradient(circle_at_top_right,#e2fbe7_0%,#f8fafc_45%,#ecfdf3_100%)"} `}
+    >
       <NavBar />
       <button
         onClick={() => router.push("/form")}
@@ -94,40 +131,95 @@ const Page = () => {
       >
         Add Task
       </button>
-      <div className="flex gap-3 items-center fixed top-33 md:left-1/2 md:translate-x-[-25%] z-[-1] w-full md:px-0 px-2">
-        <Show selected={selected} id={'Show All'} name={'Show All'} func = {handleSelected} />
-        <Show selected={selected} id={'Show Low'} name={'Show Low Priority tasks'} func = {handleSelected} />
-        <Show selected={selected} id={'Show Medium'} name={'Show Medium Priority tasks'} func = {handleSelected} />
-        <Show selected={selected} id={'Show High'} name={'Show High Priority tasks'} func = {handleSelected} />
-        
-        
+      <div className="fixed top-20 right-8 w-12 h-12 flex flex-col items-center gap-1 group">
+        <button
+          onClick={() => setisDark(!isDark)}
+          className="rounded-full w-full h-full flex items-center justify-center bg-slate-400 cursor-pointer text-white hover:bg-gray-500 transition-all duration-300"
+        >
+          {isDark ? <FaSun size={30} /> : <FaMoon size={30} />}
+        </button>
+        <p className="group-hover:opacity-100 opacity-0 absolute transition-all top-13 w-25 text-center duration-300 p-1 rounded-md bg-gray-700 text-white text-sm">
+          Toggle Dark
+        </p>
+      </div>
+      <div className="flex gap-3 items-center fixed top-33 md:left-1/2 md:translate-x-[-25%] z-1 w-full md:px-0 px-2">
+        <Show
+          selected={selected}
+          id={"Show All"}
+          name={"Show All"}
+          func={handleSelected}
+        />
+        <Show
+          selected={selected}
+          id={"Show Low"}
+          name={"Show Low Priority tasks"}
+          func={handleSelected}
+        />
+        <Show
+          selected={selected}
+          id={"Show Medium"}
+          name={"Show Medium Priority tasks"}
+          func={handleSelected}
+        />
+        <Show
+          selected={selected}
+          id={"Show High"}
+          name={"Show High Priority tasks"}
+          func={handleSelected}
+        />
       </div>
       {showTask().length === 0 ? (
-        <div className="h-40 w-full flex items-center md:justify-center md:mt-60 mt-80">
+        <div className="h-40 w-full flex items-center md:justify-center md:pt-60 pt-80">
           <h1 className="md:text-8xl text-7xl md:w-[60%] w-full md:px-0 px-5 font-bold text-green-400">
             No Tasks to Show {session?.user?.name}.
           </h1>
         </div>
       ) : (
-        <div className="container flex flex-wrap gap-8 md:mt-50 mt-55 px-10 pb-16">
-          {showTask().map((task) => {
-            return (
-              <Card
-                key={task._id}
-                id={task._id}
-                user={task.user}
-                title={task.title}
-                desc={task.description}
-                date={task.dueDate}
-                priority={task.priority}
-                status={task.status}
-                deleteFunc={handleDelete}
-                statusFunc={handleStatus}
-                editFunc={handleEdit}
-              />
-            );
-          })}
-        </div>
+        <DragDropContext onDragEnd={handleDragEnd}>
+          <Droppable droppableId="tasks" direction="horizontal">
+            {(provided) => (
+              <div
+                className="container flex flex-wrap items-center gap-8 md:pt-50 pt-55 px-4 pb-16"
+                {...provided.droppableProps}
+                ref={provided.innerRef}
+              >
+                {showTask().map((task, index) => (
+                  <Draggable
+                    key={task._id}
+                    draggableId={String(task._id)}
+                    index={index}
+                  >
+                    {(provided, snapshot) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        style={{
+                          ...provided.draggableProps.style,
+                          opacity: snapshot.isDragging ? 0.8 : 1,
+                        }}
+                      >
+                        <Card
+                          id={task._id}
+                          user={task.user}
+                          title={task.title}
+                          desc={task.description}
+                          date={task.dueDate}
+                          priority={task.priority}
+                          status={task.status}
+                          deleteFunc={handleDelete}
+                          statusFunc={handleStatus}
+                          editFunc={handleEdit}
+                        />
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
       )}
     </div>
   );

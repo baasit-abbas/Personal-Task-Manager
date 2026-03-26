@@ -60,6 +60,12 @@ const Card = (props) => {
         <p>Due Date: {formatDueDate(props.date)}</p>
         <MdDateRange className="text-green-400" size={25} />
       </div>
+      <div className="p-3 rounded-md bg-amber-100">
+        {props.status === 'Done'? <p className="text-green-400 font-bold">Task is Completed</p>:
+        new Date(props.date) < new Date() ? <p className="text-red-500 font-bold">Task is Overdue!!</p>:
+        <p className="text-slate-700 font-bold">Time Left: {Math.ceil((new Date(props.date) - new Date()) / (1000 * 60 * 60 * 24)+1)} days</p>
+        }
+      </div>
       <div className="flex justify-between font-bold text-lg px-2 rounded-md bg-blue-200 py-2 transition-all duration-300">
             <p onClick = {handleDone} id='To-DO' className="text-blue-600 cursor-pointer hover:text-blue-500 hover:scale-105">To DO</p>
             <p onClick = {handleDone} id="In Progress" className="text-yellow-600 cursor-pointer hover:text-yellow-500 hover:scale-105">In Progress</p>
