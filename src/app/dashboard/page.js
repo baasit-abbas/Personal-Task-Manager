@@ -2,14 +2,15 @@
 import NavBar from "@/Components/NavBar";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { act, useEffect, useState } from "react";
 import API from "../lib/api_client";
 import Card from "@/Components/Card";
 import { toast } from "react-toastify";
 import Show from "@/Components/Show";
 import { FaSun } from "react-icons/fa";
 import { FaMoon } from "react-icons/fa";
-import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
+import { DndContext } from "@dnd-kit/core";
+import { arrayMove, SortableContext } from "@dnd-kit/sortable";
 
 const Page = () => {
   const [tasks, setTasks] = useState([]);
@@ -90,35 +91,11 @@ const Page = () => {
   };
 
   const handleDragEnd = (result) => {
-    const { source, destination } = result;
-
-    if (!destination || source.index === destination.index) {
-      return;
-    }
-
-    const visibleTasks = showTask();
-    const reorderedVisible = Array.from(visibleTasks);
-    const [movedTask] = reorderedVisible.splice(source.index, 1);
-    reorderedVisible.splice(destination.index, 0, movedTask);
-
-    if (selected === "Show All") {
-      setTasks(reorderedVisible);
-      return;
-    }
-
-    const visibleTaskIds = new Set(visibleTasks.map((task) => String(task._id)));
-    let visibleIndex = 0;
-
-    const mergedTasks = tasks.map((task) => {
-      if (!visibleTaskIds.has(String(task._id))) {
-        return task;
-      }
-      const nextTask = reorderedVisible[visibleIndex];
-      visibleIndex += 1;
-      return nextTask;
-    });
-
-    setTasks(mergedTasks);
+    const { active, over } = result;
+    if (!over || active.id === over.id) return;
+    let oldIdx = tasks.findIndex((t) => t._id === active.id);
+    let newIdx = tasks.findIndex((t) => t._id === over.id);
+    setTasks(arrayMove(tasks, oldIdx, newIdx));
   };
   return (
     <div
@@ -175,51 +152,27 @@ const Page = () => {
           </h1>
         </div>
       ) : (
-        <DragDropContext onDragEnd={handleDragEnd}>
-          <Droppable droppableId="tasks" direction="horizontal">
-            {(provided) => (
-              <div
-                className="container flex flex-wrap items-center gap-8 md:pt-50 pt-55 px-4 pb-16"
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {showTask().map((task, index) => (
-                  <Draggable
-                    key={task._id}
-                    draggableId={String(task._id)}
-                    index={index}
-                  >
-                    {(provided, snapshot) => (
-                      <div
-                        ref={provided.innerRef}
-                        {...provided.draggableProps}
-                        {...provided.dragHandleProps}
-                        style={{
-                          ...provided.draggableProps.style,
-                          opacity: snapshot.isDragging ? 0.8 : 1,
-                        }}
-                      >
-                        <Card
-                          id={task._id}
-                          user={task.user}
-                          title={task.title}
-                          desc={task.description}
-                          date={task.dueDate}
-                          priority={task.priority}
-                          status={task.status}
-                          deleteFunc={handleDelete}
-                          statusFunc={handleStatus}
-                          editFunc={handleEdit}
-                        />
-                      </div>
-                    )}
-                  </Draggable>
-                ))}
-                {provided.placeholder}
-              </div>
-            )}
-          </Droppable>
-        </DragDropContext>
+        <DndContext onDragEnd={handleDragEnd}>
+          <SortableContext items={tasks.map((t) => t._id)}>
+            <div className="container flex flex-wrap items-center gap-8 md:pt-50 pt-55 px-4 pb-16">
+              {showTask().map((task) => (
+                <Card
+                  key={task._id}
+                  id={task._id}
+                  user={task.user}
+                  title={task.title}
+                  desc={task.description}
+                  date={task.dueDate}
+                  priority={task.priority}
+                  status={task.status}
+                  deleteFunc={handleDelete}
+                  statusFunc={handleStatus}
+                  editFunc={handleEdit}
+                />
+              ))}
+            </div>
+          </SortableContext>
+        </DndContext>
       )}
     </div>
   );
